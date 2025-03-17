@@ -19,11 +19,14 @@ const createAppointment = async (req, res, next) => {
     appointment_date,
     appointment_time,
     carrier_name,
+    warehouse_name,
+    warehouse_address,
     driver_name,
     helper_name,
     parking_slot,
     dock,
     plate_no,
+    activity,
     status,
   } = req.body;
 
@@ -33,11 +36,14 @@ const createAppointment = async (req, res, next) => {
       appointment_date,
       appointment_time,
       carrier_name,
+      warehouse_name,
+      warehouse_address,
       driver_name,
       helper_name,
       parking_slot,
       dock,
       plate_no,
+      activity,
       status,
     });
 
@@ -146,11 +152,14 @@ const updateAppointment = async (req, res, next) => {
     appointment_date,
     appointment_time,
     carrier_name,
+    warehouse_name,
+    warehouse_address,
     driver_name,
     helper_name,
     parking_slot,
     dock,
     plate_no,
+    activity,
   } = req.body;
 
   try {
@@ -160,11 +169,14 @@ const updateAppointment = async (req, res, next) => {
         appointment_date,
         appointment_time,
         carrier_name,
+        warehouse_name,
+        warehouse_address,
         driver_name,
         helper_name,
         parking_slot,
         dock,
         plate_no,
+        activity,
       },
       { new: true } // Return the updated document
     );
@@ -184,6 +196,7 @@ const updateAppointment = async (req, res, next) => {
   }
 };
 
+// http://localhost:5000/api/appointment/:appointment_id/scan - PATCH - Guard scan
 const updateAppointmentScan = async (req, res, next) => {
   const { appointment_id } = req.params;
 

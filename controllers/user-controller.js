@@ -140,7 +140,26 @@ const getListGuardRole = async (req, res, next) => {
   }
 };
 
+// http:localhost:5000/api/user/:id/delete-account - DELETE (guard account)
+const deleteGuardById = async (req, res) => {
+  try {
+    const guardId = req.params.id;
+    const deletedGuard = await User.findByIdAndDelete(guardId);
+
+    if (!deletedGuard) {
+      return res.status(404).json({ message: "Guard not found" });
+    }
+
+    res.status(200).json({ message: "Guard deleted successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting guard", error: error.message });
+  }
+};
+
 // ---- exports ----
 exports.signIn = signIn;
 exports.signUp = signUp;
 exports.getListGuardRole = getListGuardRole;
+exports.deleteGuardById = deleteGuardById;

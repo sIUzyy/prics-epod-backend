@@ -12,14 +12,15 @@ const GLOBAL_ACCESS = process.env.GLOBAL_ACCESS;
 const MONGODB_URL = process.env.MONGODB_URL;
 
 // routes
-const shipmentRoutes = require("./routes/shipment-route");
-const productRoutes = require("./routes/product-route");
-const userRoutes = require("./routes/user-route");
 const preDeliveryRoutes = require("./routes/pre-delivery-route");
-const truckRoutes = require("./routes/truck-route");
-const driverRoutes = require("./routes/driver-route");
-const warehouseRoutes = require("./routes/warehouse-route");
 const appointmentRoutes = require("./routes/appointment-route");
+const warehouseRoutes = require("./routes/warehouse-route");
+const shipmentRoutes = require("./routes/shipment-route");
+const activityRoutes = require("./routes/activity-route");
+const productRoutes = require("./routes/product-route");
+const driverRoutes = require("./routes/driver-route");
+const truckRoutes = require("./routes/truck-route");
+const userRoutes = require("./routes/user-route");
 
 // initialize an express
 const app = express();
@@ -65,6 +66,7 @@ app.use("/api/truck", truckRoutes);
 app.use("/api/driver", driverRoutes);
 app.use("/api/warehouse", warehouseRoutes);
 app.use("/api/appointment", appointmentRoutes);
+app.use("/api/activity", activityRoutes);
 
 // -- error handling middleware
 app.use((error, req, res, next) => {

@@ -14,5 +14,8 @@ router.post("/signin", userController.signIn);
 // get the user guard role list
 router.get("", userController.getListGuardRole);
 
+// delete user (guard)
+router.delete("/:id/delete-account", userController.deleteGuardById);
+
 // exports
 module.exports = router;

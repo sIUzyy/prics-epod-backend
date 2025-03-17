@@ -15,6 +15,7 @@ const shipmentSchema = new Schema({
   status: { type: String, required: true },
   epodStatus: { type: String, required: true },
   productCodes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], // Can be empty initially
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Shipment", shipmentSchema);
