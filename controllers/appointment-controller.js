@@ -197,11 +197,93 @@ const updateAppointment = async (req, res, next) => {
 };
 
 // http://localhost:5000/api/appointment/:appointment_id/scan - PATCH - Guard scan
-const updateAppointmentScan = async (req, res, next) => {
+// const updateAppointmentScan = async (req, res, next) => {
+//   const { appointment_id } = req.params;
+
+//   try {
+//     // Find the appointment by appointment_id
+//     const appointment = await Appointment.findOne({ appointment_id });
+
+//     if (!appointment) {
+//       return res.status(404).json({ message: "Appointment not found" });
+//     }
+
+//     if (!appointment.time_in) {
+//       // First scan: Set time_in, update status to 'In Progress'
+//       appointment.time_in = dayjs()
+//         .tz("Asia/Manila")
+//         .format("YYYY-MM-DD HH:mm:ss");
+//       appointment.status = "In Progress";
+//     } else if (!appointment.time_out) {
+//       // Second scan: Set time_out, mark scanned as true, update status to 'Completed'
+//       appointment.time_out = dayjs()
+//         .tz("Asia/Manila")
+//         .format("YYYY-MM-DD HH:mm:ss");
+//       appointment.scanned = true;
+//       appointment.status = "Completed";
+//     } else {
+//       // If both time_in and time_out exist, scanning again does nothing
+//       return res.status(200).json({
+//         message: "Appointment already scanned completely",
+//         appointment,
+//       });
+//     }
+
+//     await appointment.save(); // Save changes
+
+//     res.status(200).json({
+//       message: appointment.time_out
+//         ? "Time-out recorded successfully, appointment completed"
+//         : "Time-in recorded successfully, appointment in progress",
+//       appointment,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     return next(
+//       new HttpError(
+//         "Failed to update appointment scan. Please try again later.",
+//         500
+//       )
+//     );
+//   }
+// };
+
+// http://localhost:5000/api/appointment/:appointment_id/time-in - PATCH - Guard scan
+const updateTimeIn = async (req, res) => {
   const { appointment_id } = req.params;
 
   try {
-    // Find the appointment by appointment_id
+    const appointment = await Appointment.findOne({ appointment_id });
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    if (appointment.time_in) {
+      return res
+        .status(400)
+        .json({ message: "Time-in already recorded", appointment });
+    }
+
+    appointment.time_in = dayjs()
+      .tz("Asia/Manila")
+      .format("YYYY-MM-DD HH:mm:ss");
+    appointment.status = "In Progress";
+
+    await appointment.save();
+    res.status(200).json({ message: "Time-in recorded", appointment });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error updating time-in", error: err.message });
+  }
+};
+
+// http://localhost:5000/api/appointment/:appointment_id/time-out - PATCH - Guard scan
+const updateTimeOut = async (req, res) => {
+  const { appointment_id } = req.params;
+
+  try {
     const appointment = await Appointment.findOne({ appointment_id });
 
     if (!appointment) {
@@ -209,42 +291,28 @@ const updateAppointmentScan = async (req, res, next) => {
     }
 
     if (!appointment.time_in) {
-      // First scan: Set time_in, update status to 'In Progress'
-      appointment.time_in = dayjs()
-        .tz("Asia/Manila")
-        .format("YYYY-MM-DD HH:mm:ss");
-      appointment.status = "In Progress";
-    } else if (!appointment.time_out) {
-      // Second scan: Set time_out, mark scanned as true, update status to 'Completed'
-      appointment.time_out = dayjs()
-        .tz("Asia/Manila")
-        .format("YYYY-MM-DD HH:mm:ss");
-      appointment.scanned = true;
-      appointment.status = "Completed";
-    } else {
-      // If both time_in and time_out exist, scanning again does nothing
-      return res.status(200).json({
-        message: "Appointment already scanned completely",
-        appointment,
-      });
+      return res
+        .status(400)
+        .json({ message: "Time-in must be recorded first" });
     }
 
-    await appointment.save(); // Save changes
+    if (appointment.time_out) {
+      return res
+        .status(400)
+        .json({ message: "Time-out already recorded", appointment });
+    }
 
-    res.status(200).json({
-      message: appointment.time_out
-        ? "Time-out recorded successfully, appointment completed"
-        : "Time-in recorded successfully, appointment in progress",
-      appointment,
-    });
+    appointment.time_out = dayjs()
+      .tz("Asia/Manila")
+      .format("YYYY-MM-DD HH:mm:ss");
+    appointment.status = "Completed";
+
+    await appointment.save();
+    res.status(200).json({ message: "Time-out recorded", appointment });
   } catch (err) {
-    console.error(err);
-    return next(
-      new HttpError(
-        "Failed to update appointment scan. Please try again later.",
-        500
-      )
-    );
+    res
+      .status(500)
+      .json({ message: "Error updating time-out", error: err.message });
   }
 };
 
@@ -277,5 +345,7 @@ exports.getAppointment = getAppointment;
 exports.getAppointmentByAppointmentId = getAppointmentByAppointmentId;
 exports.getAppointmentByPlateNo = getAppointmentByPlateNo;
 exports.updateAppointment = updateAppointment;
-exports.updateAppointmentScan = updateAppointmentScan;
+// exports.updateAppointmentScan = updateAppointmentScan;
+exports.updateTimeIn = updateTimeIn;
+exports.updateTimeOut = updateTimeOut;
 exports.deleteAppointment = deleteAppointment;

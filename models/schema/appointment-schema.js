@@ -17,7 +17,7 @@ const appointmentSchema = new Schema({
   status: { type: String, required: true },
   time_in: { type: String, default: null },
   time_out: { type: String, default: null },
-  scanned: { type: Boolean, default: false }, // security scanned
+  //scanned: { type: Boolean, default: false }, // security scanned
 });
 
 module.exports = mongoose.model("Appointment", appointmentSchema);

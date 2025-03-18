@@ -117,29 +117,6 @@ const getShipmentByPlateNo = async (req, res) => {
 };
 
 // http://localhost:5000/api/shipment/:trackingNo/update-epod-status - PATCH - update the epod status
-// const updateShipmentEPODStatus = async (req, res, next) => {
-//   const { trackingNo } = req.params;
-
-//   try {
-//     const shipment = await Shipment.findOneAndUpdate(
-//       { trackingNo },
-//       { epodStatus: "delivered" }, // Update to delivered
-//       { new: true }
-//     );
-
-//     if (!shipment) {
-//       return res.status(404).json({ message: "Shipment not found" });
-//     }
-
-//     res.status(200).json({ message: "Shipment EPOD status updated", shipment });
-//   } catch (err) {
-//     console.error(err);
-//     return res.status(500).json({
-//       message: "Failed to update EPOD status. Please try again later.",
-//     });
-//   }
-// };
-
 const updateShipmentEPODStatus = async (req, res, next) => {
   const { trackingNo } = req.params;
   const { epodStatus } = req.body; // Get status from request body
@@ -155,12 +132,10 @@ const updateShipmentEPODStatus = async (req, res, next) => {
       return res.status(404).json({ message: "Shipment not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: `Shipment EPOD status updated to ${epodStatus}`,
-        shipment,
-      });
+    res.status(200).json({
+      message: `Shipment EPOD status updated to ${epodStatus}`,
+      shipment,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({

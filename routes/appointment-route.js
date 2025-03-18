@@ -26,10 +26,17 @@ router.patch(
   appointmentController.updateAppointment
 );
 
-router.patch(
-  "/:appointment_id/scan",
-  appointmentController.updateAppointmentScan
-);
+// scan the gatepass - security guard
+// router.patch(
+//   "/:appointment_id/scan",
+//   appointmentController.updateAppointmentScan
+// );
+
+// scan the gatepass - security guard
+router.patch("/:appointment_id/time-in", appointmentController.updateTimeIn);
+
+// scan the gatepass - security guard
+router.patch("/:appointment_id/time-out", appointmentController.updateTimeOut);
 
 // delete appointment by appointment id
 router.delete(
