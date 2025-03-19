@@ -144,6 +144,35 @@ const updateShipmentEPODStatus = async (req, res, next) => {
   }
 };
 
+// http://localhost:5000/api/shipment/:trackingNo/update-priority - PATCH - update the priority order
+const updateShipmentPriority = async (req, res, next) => {
+  const { trackingNo } = req.params;
+  const { priority } = req.body;
+
+  try {
+    // Find and update the shipment
+    const shipment = await Shipment.findOneAndUpdate(
+      { trackingNo },
+      { priority }, // Update priority field
+      { new: true } // Return the updated document
+    );
+
+    if (!shipment) {
+      return res.status(404).json({ message: "Shipment not found" });
+    }
+
+    res.status(200).json({
+      message: `Shipment priority updated to ${priority}`,
+      shipment,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Failed to update shipment priority. Please try again later.",
+    });
+  }
+};
+
 // http://localhost:5000/api/shipment/:id
 const deleteShipmentData = async (req, res, next) => {
   const trackingNo = req.params.trackingNo; // Corrected
@@ -176,4 +205,5 @@ exports.getShipment = getShipment;
 exports.getShipmentByPlateNo = getShipmentByPlateNo;
 exports.getShipmentByTrackingNo = getShipmentByTrackingNo;
 exports.updateShipmentEPODStatus = updateShipmentEPODStatus;
+exports.updateShipmentPriority = updateShipmentPriority;
 exports.deleteShipmentData = deleteShipmentData;

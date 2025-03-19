@@ -26,6 +26,12 @@ router.patch(
   shipmentController.updateShipmentEPODStatus
 );
 
+// update the priority
+router.patch(
+  "/:trackingNo/update-priority",
+  shipmentController.updateShipmentPriority
+);
+
 // delete shipment
 router.delete("/:trackingNo", shipmentController.deleteShipmentData);
 
