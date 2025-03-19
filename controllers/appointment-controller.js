@@ -259,6 +259,20 @@ const updateTimeIn = async (req, res) => {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
+    // Get today's date in YYYY-MM-DD format
+    const today = dayjs().tz("Asia/Manila").format("YYYY-MM-DD");
+    const appointmentDate = dayjs(appointment.appointment_date)
+      .tz("Asia/Manila")
+      .format("YYYY-MM-DD");
+
+    // Check if appointment is scheduled for today
+    if (appointmentDate !== today) {
+      return res.status(400).json({
+        message: "This appointment is not scheduled for today.",
+        appointment,
+      });
+    }
+
     if (appointment.time_in) {
       return res
         .status(400)
