@@ -28,20 +28,6 @@ const app = express();
 // this will parse any incoming request body and extract any json data.
 app.use(bodyParser.json());
 
-// middleware to access image
-app.use("/uploads/images", express.static(path.join("uploads", "images"))); // static serving
-
-// Enable CORS for static files
-app.use("/uploads/images", (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins (change to specific URL in production)
-  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  next();
-});
-
 // cors middleware
 app.use(
   cors({
@@ -56,6 +42,20 @@ app.use(
     ],
   })
 );
+
+// middleware to access image
+app.use("/uploads/images", express.static(path.join("uploads", "images"))); // static serving
+
+// Enable CORS for static files
+app.use("/uploads/images", (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins (change to specific URL in production)
+  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  next();
+});
 
 // middleware for route
 app.use("/api/shipment", shipmentRoutes);
