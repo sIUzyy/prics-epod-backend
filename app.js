@@ -28,6 +28,9 @@ const app = express();
 // this will parse any incoming request body and extract any json data.
 app.use(bodyParser.json());
 
+// middleware to access image
+app.use("/uploads/images", express.static(path.join("uploads", "images"))); // static serving
+
 // Enable CORS for static files
 app.use("/uploads/images", (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*"); // Allow all origins (change to specific URL in production)
@@ -38,9 +41,6 @@ app.use("/uploads/images", (req, res, next) => {
   );
   next();
 });
-
-// middleware to access image
-app.use("/uploads/images", express.static(path.join("uploads", "images"))); // static serving
 
 // cors middleware
 app.use(
