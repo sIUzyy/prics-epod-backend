@@ -6,23 +6,21 @@ const Truck = require("../models/schema/truck-schema");
 
 // http:localhost:5000/api/truck/createtruck
 const createtruck = async (req, res, next) => {
-  const { truck_model, weight_capacity, plate_no } = req.body;
+  const { truck_model, plate_no } = req.body;
 
   try {
     const newTruck = new Truck({
       truckModel: truck_model,
-      weightCapacity: weight_capacity,
+      // weightCapacity: weight_capacity,
       truckPlateNo: plate_no,
     });
 
     await newTruck.save();
 
-    return res
-      .status(201)
-      .json({
-        message: "Truck list  created successfully",
-        truck_data: newTruck,
-      });
+    return res.status(201).json({
+      message: "Truck list  created successfully",
+      truck_data: newTruck,
+    });
   } catch (err) {
     console.log(err);
     const error = new HttpError(
